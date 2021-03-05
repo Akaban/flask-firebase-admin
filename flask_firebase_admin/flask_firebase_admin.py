@@ -46,12 +46,12 @@ class FirebaseAdmin(object):
     storage: ModuleType = storage  # noqa: F811
     tenant_mgt: ModuleType = tenant_mgt  # noqa: F811
 
-    def __init__(self, app: Flask = None) -> None:
+    def __init__(self, app: Flask = None, options=None) -> None:
         self.app = app
         if app is not None:
-            self.init_app(app)
+            self.init_app(app, options)
 
-    def init_app(self, app: Flask) -> None:
+    def init_app(self, app: Flask, options) -> None:
         app.config.setdefault("FIREBASE_ADMIN_CREDENTIAL")
         app.config.setdefault(
             "FIREBASE_ADMIN_AUTHORIZATION_SCHEME",
@@ -65,7 +65,7 @@ class FirebaseAdmin(object):
         )
 
         cred = app.config["FIREBASE_ADMIN_CREDENTIAL"]
-        self._admin = firebase_admin.initialize_app(cred)
+        self._admin = firebase_admin.initialize_app(cred, options=options)
 
     @property
     def admin(self) -> firebase_admin.App:
